@@ -1,0 +1,2375 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abhishek Soni - Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00f3ff;
+            --dark: #050505;
+            --text: #f0f0f0;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.08);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            line-height: 1.8;
+            color: var(--text);
+            background-color: var(--dark);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Scroll Progress Bar */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            z-index: 9999;
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        /* Background Canvas */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
+
+        /* Background Overlay for Readability */
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(5, 5, 5, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            padding: 0.5rem 0;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            list-style: none;
+            padding: 1rem 2rem;
+            flex-wrap: wrap;
+        }
+
+        nav ul li {
+            margin: 0 1.5rem;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+            letter-spacing: 0.02em;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        nav ul li a:hover::after,
+        nav ul li a.active::after {
+            width: 100%;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary);
+        }
+
+        .nav-resume-btn {
+            background: rgba(0, 243, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--primary);
+            border-radius: 5px;
+            color: var(--primary) !important;
+        }
+
+        .nav-resume-btn:hover {
+            background: var(--primary);
+            color: black !important;
+            box-shadow: 0 0 15px var(--primary);
+        }
+
+        .nav-resume-btn::after {
+            display: none;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 2rem;
+        }
+
+        .hero::before {
+            display: none;
+        }
+
+        .hero-content {
+            text-align: center;
+            color: white;
+            z-index: 1;
+            max-width: 900px;
+            animation: fadeInUp 1s ease;
+        }
+
+        /* Typewriter & Cursor */
+        #typewriter {
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .cursor {
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* Floating Action Button */
+        .fab-contact {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+            z-index: 1000;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fab-contact:hover {
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.8);
+        }
+
+        .hero .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+            animation: fadeInUp 1s ease 0.6s backwards;
+        }
+
+        .hero .contact-info a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .hero .contact-info a:hover {
+            transform: translateY(-5px);
+            background: var(--primary);
+            color: black;
+            box-shadow: 0 0 20px var(--primary);
+            border-color: var(--primary);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+
+        .scroll-indicator::before {
+            content: '↓';
+            color: white;
+            font-size: 2rem;
+        }
+
+        /* Section Styling */
+        section {
+            padding: 5rem 2rem;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+            color: var(--text);
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        /* Profile Section */
+        #profile {
+            background: transparent;
+        }
+
+        .profile-content {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            text-align: center;
+        }
+
+        .profile-content strong {
+            color: var(--primary);
+        }
+
+        /* Skills Section */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .skill-card h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .skill-card ul {
+            list-style: none;
+        }
+
+        .skill-card ul li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .skill-card ul li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* Education Section */
+        #education {
+            background: transparent;
+        }
+
+        .education-timeline {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .education-timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: var(--primary);
+        }
+
+        .education-item {
+            margin-bottom: 3rem;
+            position: relative;
+            width: 45%;
+            animation: slideIn 0.8s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .education-item:nth-child(odd) {
+            margin-left: auto;
+            padding-left: 3rem;
+        }
+
+        .education-item:nth-child(even) {
+            padding-right: 3rem;
+            text-align: right;
+        }
+
+        .education-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 0 0 4px var(--primary);
+        }
+
+        .education-item:nth-child(odd)::before {
+            left: -10px;
+        }
+
+        .education-item:nth-child(even)::before {
+            right: -10px;
+        }
+
+        .education-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            color: var(--text);
+        }
+
+        .education-card h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-image::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: ripple 3s linear infinite;
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(0.8);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .project-content {
+            padding: 1.5rem;
+        }
+
+        .project-content h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .project-tech {
+            color: var(--primary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .project-content ul {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .project-content ul li {
+            padding: 0.3rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            font-size: 0.95rem;
+        }
+
+        .project-content ul li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+        }
+
+        /* Action Button */
+        .action-btn {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+            opacity: 0;
+        }
+
+        .project-card:hover .action-btn,
+        .cert-card:hover .action-btn {
+            opacity: 1;
+        }
+
+        .action-btn:hover {
+            background: var(--primary);
+            color: black;
+            transform: scale(1.1);
+        }
+
+        /* Carousel Styles */
+        .project-image {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .project-image:hover img {
+            transform: scale(1.05);
+            transition: transform 0.3s ease;
+        }
+
+        .click-hint {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 0.5rem;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            color: white;
+            text-align: center;
+            font-size: 0.8rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .project-card:hover .click-hint {
+            opacity: 1;
+        }
+
+        /* Modal Animation */
+        /* Modal Animation - Centering Fix */
+        dialog {
+            opacity: 0;
+            /* Ensure fixed positioning works correctly */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            margin: 0;
+            /* Reset default dialog margin */
+            transform: translate(-50%, -60%) scale(0.9);
+
+            /* Sizing & Scroll */
+            max-height: 90vh;
+            /* Prevent overflow on small screens */
+            overflow-y: auto;
+            /* Enable scrolling if content is tall */
+
+            transition: opacity 0.3s ease, transform 0.3s ease, overlay 0.3s allow-discrete, display 0.3s allow-discrete;
+        }
+
+        dialog[open] {
+            opacity: 1;
+            margin: 0;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        @starting-style {
+            dialog[open] {
+                opacity: 0;
+                transform: translate(-50%, -60%) scale(0.9);
+            }
+        }
+
+        /* Modal Custom Styles */
+        dialog.modal-wide {
+            width: 90%;
+            max-width: 800px;
+            /* Remove margins that might conflict with fixed positioning */
+            margin: 0;
+            padding: 2rem;
+            background: rgba(10, 10, 10, 0.95);
+            color: var(--text-light);
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Carousel Caption Styles */
+        .carousel-item {
+            min-width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            scroll-snap-align: start;
+            position: relative;
+        }
+
+        .carousel-slide {
+            width: 100%;
+            /* Changed from min-width to width to fit container */
+            height: 85%;
+            /* Reserve space for caption */
+            object-fit: cover;
+        }
+
+        .carousel-caption {
+            height: 15%;
+            background: rgba(0, 0, 0, 0.7);
+            color: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 0 1rem;
+        }
+
+        dialog::backdrop {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        dialog h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .close-modal {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            float: right;
+            margin-bottom: 1rem;
+        }
+
+        .modal-actions {
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .carousel-track {
+            display: flex;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            width: 100%;
+            height: 100%;
+            scrollbar-width: none;
+            scroll-snap-type: x mandatory;
+        }
+
+        .carousel-track::-webkit-scrollbar {
+            display: none;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            height: 100%;
+            object-fit: cover;
+            flex-shrink: 0;
+            scroll-snap-align: start;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            font-size: 1.5rem;
+            padding: 0.5rem;
+            cursor: pointer;
+            z-index: 5;
+            transition: background 0.3s;
+            opacity: 0;
+            /* Hidden by default */
+        }
+
+        .project-card:hover .carousel-btn {
+            opacity: 1;
+            /* Show on hover */
+        }
+
+        .carousel-btn:hover {
+            background: var(--primary);
+            color: black;
+        }
+
+        .carousel-btn.prev {
+            left: 0;
+        }
+
+        .carousel-btn.next {
+            right: 0;
+        }
+
+        /* Experience Section */
+        #experience {
+            background: transparent;
+        }
+
+        .experience-grid {
+            display: grid;
+            gap: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .experience-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+            box-shadow: 0 5px 20px rgba(0, 243, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .experience-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Certifications Section */
+        .cert-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .cert-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cert-card::before {
+            content: '🏆';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 5rem;
+            opacity: 0.1;
+        }
+
+        .cert-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .cert-upload {
+            margin-top: 1rem;
+            padding: 1rem;
+            border: 2px dashed var(--gray);
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .cert-upload:hover {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        .cert-preview {
+            max-width: 100%;
+            border-radius: 5px;
+            margin-top: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.2rem;
+            }
+
+            .education-timeline::before {
+                left: 0;
+            }
+
+            .education-item {
+                width: 100%;
+                padding-left: 3rem !important;
+                padding-right: 0 !important;
+                text-align: left !important;
+            }
+
+            .education-item::before {
+                left: -10px !important;
+            }
+
+            .projects-grid,
+            .skills-grid,
+            .cert-grid {
+                grid-template-columns: 1fr;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            nav ul li {
+                margin: 0.5rem 0;
+            }
+        }
+
+        /* Modal styling */
+        dialog {
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--primary);
+            border-radius: 15px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            color: var(--text);
+            box-shadow: 0 0 50px rgba(0, 243, 255, 0.2);
+        }
+
+        dialog::backdrop {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        button.close-modal {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all 0.3s;
+        }
+
+        button.close-modal:hover {
+            background: var(--primary);
+            color: black;
+            box-shadow: 0 0 15px var(--primary);
+        }
+
+        /* Smooth reveal animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Modal Styling Updates */
+        dialog {
+            background: rgba(10, 10, 10, 0.95);
+            color: white;
+            border: 1px solid var(--primary);
+            border-radius: 15px;
+            padding: 2rem;
+            max-width: 800px;
+            width: 90%;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 0 50px rgba(0, 243, 255, 0.2);
+        }
+
+        dialog::backdrop {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-wide {
+            max-width: 1000px;
+        }
+
+        .resume-preview-container {
+            margin: 1rem 0;
+            background: white;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .modal-actions {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .resume-download-btn {
+            background: var(--primary);
+            color: black;
+            padding: 0.8rem 2rem;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .resume-download-btn:hover {
+            box-shadow: 0 0 20px var(--primary);
+        }
+
+        /* Project Gallery */
+        .project-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            cursor: pointer;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            aspect-ratio: 16/9;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- Boot Loader -->
+    <div id="boot-loader">
+        <div class="terminal-text" id="boot-text"></div>
+    </div>
+    <style>
+        #boot-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Courier New', monospace;
+            color: #0f0;
+            padding: 2rem;
+            transition: opacity 1s ease;
+        }
+
+        .terminal-text {
+            font-size: 1.2rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
+        /* 
+           CSS Failsafe:
+           If JS fails entirely, this animation forces the loader to hide 
+           after 5 seconds, preventing a permanent black screen. 
+        */
+        @keyframes force-hide {
+            0% {
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+            90% {
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+            100% {
+                opacity: 0;
+                pointer-events: none;
+                visibility: hidden;
+            }
+        }
+
+        #boot-loader {
+            animation: force-hide 5s forwards;
+            /* Runs automatically */
+        }
+    </style>
+
+    <div class="bg-overlay"></div>
+    <canvas id="bg-canvas"></canvas>
+
+    <nav id="navbar">
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#profile">Profile</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#education">Education</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#certifications">Certifications</a></li>
+            <li><a href="assets/final-resume.pdf" class="nav-resume-btn"
+                    onclick="openModal('resume-modal'); return false;">Download Resume</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Abhishek Soni</h1>
+            <p class="subtitle">I'm a <span id="typewriter"></span><span class="cursor">|</span></p>
+            <div class="contact-info">
+                <a href="mailto:soniabhisheksoniofficial07@gmail.com">📧 Email</a>
+                <a href="https://www.linkedin.com/in/abhishek-soni-043212279/" target="_blank">� LinkedIn</a>
+                <a href="https://github.com/abhishek39980" target="_blank">� GitHub</a>
+                <a href="https://www.instagram.com/abhxshek27/" target="_blank">📸 Instagram</a>
+            </div>
+        </div>
+
+        <div class="scroll-indicator">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                <path d="M7 13l5 5 5-5M7 6l5 5 5-5" />
+            </svg>
+        </div>
+    </section>
+
+    <!-- Profile Section -->
+    <section id="profile">
+        <div class="container">
+            <h2>Profile</h2>
+            <div class="profile-content reveal">
+                <h3 style="color: var(--primary); margin-bottom: 1rem; font-size: 1.5rem;">About Me</h3>
+                <p style="margin-bottom: 1rem;">
+                    I am a passionate <strong>Computer Engineering student</strong> and software developer with
+                    a deep love for building scalable systems and solving complex problems. My journey began
+                    with simple scripts and has evolved into architecting full-stack applications and exploring
+                    the frontiers of <strong>Artificial Intelligence</strong>.
+                </p>
+                <p style="margin-bottom: 1rem;">
+                    I’m passionate about developing intelligent systems and autonomous agents that transform complex
+                    challenges into practical, real-world solutions. I’m driven by curiosity and a desire to push
+                    technology toward becoming a true partner in decision-making and productivity. Beyond coding,
+                    I’m a
+                    car enthusiast and enjoy keeping up with the latest technology trends, new products, and
+                    innovations
+                    shaping the future of AI and engineering.
+                </p>
+            </div>
+
+            <style>
+                .profile-content {
+                    max-width: 800px;
+                    margin: 0 auto;
+                    font-size: 1.1rem;
+                    line-height: 1.8;
+                    text-align: center;
+                    background: var(--glass);
+                    backdrop-filter: blur(10px);
+                    padding: 2rem;
+                    border-radius: 15px;
+                    border: 1px solid var(--border);
+                }
+
+                .profile-content strong {
+                    color: var(--primary);
+                }
+            </style>
+        </div>
+    </section>
+
+
+
+    <!-- Skills Section -->
+    <section id="skills">
+        <div class="container">
+            <h2>Technical Skills</h2>
+            <div id="skill-orb-container"></div>
+            <style>
+                #skill-orb-container {
+                    position: relative;
+                    width: 100%;
+                    height: 500px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    perspective: 1000px;
+                }
+
+                .skill-tag {
+                    position: absolute;
+                    color: var(--primary);
+                    font-size: 1.2rem;
+                    font-weight: bold;
+                    text-shadow: 0 0 10px var(--primary);
+                    transform-style: preserve-3d;
+                    transition: color 0.3s;
+                    cursor: pointer;
+                }
+
+                .skill-tag:hover {
+                    color: white;
+                    font-size: 1.5rem;
+                    z-index: 100;
+                }
+            </style>
+        </div>
+    </section>
+
+    <!-- Shine CSS -->
+    <style>
+        /* Holo Shine Effect */
+        .card,
+        .project-card,
+        .skill-card,
+        .cert-card,
+        .experience-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .holo-shine {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at var(--shine-x, 50%) var(--shine-y, 50%),
+                    rgba(255, 255, 255, 0.15) 0%,
+                    transparent 60%);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+            mix-blend-mode: overlay;
+        }
+
+        .card:hover .holo-shine,
+        .project-card:hover .holo-shine,
+        .skill-card:hover .holo-shine,
+        .cert-card:hover .holo-shine,
+        .experience-card:hover .holo-shine {
+            opacity: 1;
+        }
+
+        /* Magnetic Button Support */
+        a,
+        button,
+        .nav-resume-btn,
+        .fab-contact {
+            display: inline-block;
+            /* Required for transform to work on inline elements */
+            transition: transform 0.1s ease-out;
+        }
+    </style>
+    <section id="education">
+        <div class="container">
+            <h2>Education</h2>
+            <div class="education-timeline">
+                <div class="education-item reveal">
+                    <div class="education-card">
+                        <h3>B.Tech in Computer Engineering</h3>
+                        <p><strong>SVKM NMIMS, Indore</strong></p>
+                        <p>2023 - Present</p>
+                    </div>
+                </div>
+                <div class="education-item reveal">
+                    <div class="education-card">
+                        <h3>Class XII</h3>
+                        <p><strong>Delhi Public School, Bhopal</strong></p>
+                        <p>2022 | 77.4%</p>
+                    </div>
+                </div>
+                <div class="education-item reveal">
+                    <div class="education-card">
+                        <h3>Class X</h3>
+                        <p><strong>Delhi Public School, Bhopal</strong></p>
+                        <p>2020 | 92%</p>
+                    </div>
+                </div>
+            </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+        <div class="container">
+            <h2>Selected Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card reveal" onclick="document.getElementById('modal-project1').showModal()">
+                    <div class="project-image" id="project1-img">
+                        <img src="assets/project1.png" style="width: 100%; height: 100%; object-fit: cover;"
+                            alt="Project 1">
+                        <div class="click-hint">Click for Details & Gallery ↗</div>
+                    </div>
+                    <div class="project-content">
+                        <h3>Autonomous Finance Agent</h3>
+                        <p class="project-tech">Python, LLMs | Jan 2026</p>
+                        <!-- Short summary -->
+                        <p style="font-size: 0.9rem; color: var(--gray);">AI-powered financial analysis tool using
+                            Python.</p>
+                    </div>
+                </div>
+
+                <div class="project-card reveal" onclick="document.getElementById('modal-project2').showModal()">
+                    <div class="project-image" id="project2-img">
+                        <img src="assets/projects/Screenshot_2026-01-10-15-52-19-66_e915865580ed677e4bb0abfb43f4f066.jpg"
+                            style="width: 100%; height: 100%; object-fit: contain; background: #000;" alt="Project 2">
+                        <div class="click-hint">Click for Details & Gallery ↗</div>
+                    </div>
+                    <div class="project-content">
+                        <h3>NMIMS Hostel Management System</h3>
+                        <p class="project-tech">Flutter, Flask, SQLite | Nov 2025</p>
+                        <p style="font-size: 0.9rem; color: var(--gray);">Full-stack mobile app for hostel
+                            administration.</p>
+                    </div>
+                </div>
+
+                <div class="project-card reveal" onclick="document.getElementById('modal-project3').showModal()">
+                    <div class="project-image" id="project3-img">
+                        <img src="assets/projects/IMG20250303005802.jpg"
+                            style="width: 100%; height: 100%; object-fit: contain; background: #000;" alt="Project 3">
+                        <div class="click-hint">Click for Details & Gallery ↗</div>
+                    </div>
+                    <div class="project-content">
+                        <h3>Self-Balancing Robot</h3>
+                        <p class="project-tech">C/C++, IoT | 2025</p>
+                        <p style="font-size: 0.9rem; color: var(--gray);">Arduino-based robot with PID control
+                            stabilization.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience">
+        <div class="container">
+            <h2>Experience</h2>
+            <div class="experience-grid">
+                <div class="experience-card reveal">
+                    <h3>Creative & Technical Team Member</h3>
+                    <p><strong>Club Malhar, SVKM NMIMS</strong> | 2023 - Present</p>
+                    <ul>
+                        <li>Contributed to event logistics, creative design, and technical setups for the annual
+                            college
+                            fest.</li>
+                        <li>Collaborated with cross-functional teams to ensure seamless event execution.</li>
+                    </ul>
+                </div>
+                <div class="experience-card reveal">
+                    <h3>IT Support / Networking Intern</h3>
+                    <p><strong>Netcom, Bhopal</strong> | May - June 2025</p>
+                    <ul>
+                        <li>Assisted in enterprise LAN setup and TCP/IP troubleshooting.</li>
+                        <li>Maintained network uptime for 50+ client systems.</li>
+                    </ul>
+                </div>
+                <div class="experience-card reveal">
+                    <h3>Mental Health Awareness Specialist</h3>
+                    <p><strong>Sewa Bharti NGO, Bhopal</strong> | May - July 2023</p>
+                    <ul>
+                        <li>Led outreach campaigns impacting <strong>1,000+ individuals</strong> in rural areas.
+                        </li>
+                        <li>Improved access to mental health resources by <strong>25%</strong> through community
+                            workshops.</li>
+                    </ul>
+                </div>
+                <div class="experience-card reveal">
+                    <h3>Core Team Lead</h3>
+                    <p><strong>Aalochak Club, SVKM NMIMS</strong> | Aug 2023 - Present</p>
+                    <ul>
+                        <li>Leading a team of <strong>30+ members</strong> to organize literary and debating events.
+                        </li>
+                        <li>Increased club engagement and event participation by <strong>40%</strong>
+                            year-over-year.
+                        </li>
+                    </ul>
+                </div>
+                <div class="experience-card reveal">
+                    <h3>Technical Core Team Member</h3>
+                    <p><strong>GDSC, SVKM NMIMS</strong> | 2024 - 2025</p>
+                    <ul>
+                        <li>Organized hackathons and technical workshops for over <strong>100+ students</strong>.
+                        </li>
+                        <li>Mentored peers in Google Cloud technologies and web development.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certifications Section -->
+    <section id="certifications">
+        <div class="container">
+            <h2>Certifications</h2>
+            <div class="cert-grid">
+                <div class="cert-card reveal">
+                    <h3>NPTEL: Artificial Intelligence</h3>
+                    <p><strong>Concepts and Techniques</strong></p>
+                    <p>2025</p>
+                    <div class="cert-tags">
+                        <span>Search Algorithms</span>
+                        <span>Logic</span>
+                        <span>Knowl. Rep.</span>
+                    </div>
+                    <div class="cert-actions" style="margin-top: 1rem; display: flex; align-items: center; gap: 10px;">
+                        <a href="assets/cert1.pdf" target="_blank" class="nav-resume-btn"
+                            style="padding: 0.5rem 1rem; font-size: 0.9rem; text-decoration: none;">View
+                            Certificate</a>
+                    </div>
+
+                </div>
+                <div class="cert-card reveal">
+                    <h3>Google Cloud Certifications</h3>
+                    <p><strong>Cloud Computing & GenAI</strong></p>
+                    <p>2024</p>
+                    <div class="cert-tags">
+                        <span>Cloud Infra</span>
+                        <span>GenAI Studio</span>
+                        <span>Security</span>
+                        <span>Prompt Eng.</span>
+                    </div>
+                    <div class="cert-actions" style="margin-top: 1rem; display: flex; align-items: center; gap: 10px;">
+                        <a href="assets/cert2.pdf" target="_blank" class="nav-resume-btn"
+                            style="padding: 0.5rem 1rem; font-size: 0.9rem; text-decoration: none;">View
+                            Certificates</a>
+                    </div>
+
+                </div>
+                <div class="cert-card reveal">
+                    <h3>Udemy Bootcamp</h3>
+                    <p><strong>The Complete Full Stack Web Development</strong></p>
+                    <p>2024</p>
+                    <div class="cert-tags">
+                        <span>MERN Stack</span>
+                        <span>Web Dev</span>
+                        <span>APIs</span>
+                        <span>Authentication</span>
+                    </div>
+                    <div class="cert-actions" style="margin-top: 1rem; display: flex; align-items: center; gap: 10px;">
+                        <a href="assets/cert3.pdf" target="_blank" class="nav-resume-btn"
+                            style="padding: 0.5rem 1rem; font-size: 0.9rem; text-decoration: none;">View
+                            Certificate</a>
+                    </div>
+
+                </div>
+            </div>
+            <style>
+                .cert-tags {
+                    display: flex;
+                    gap: 0.5rem;
+                    flex-wrap: wrap;
+                    margin: 1rem 0;
+                }
+
+                .cert-tags span {
+                    font-size: 0.8rem;
+                    background: rgba(0, 243, 255, 0.1);
+                    color: var(--primary);
+                    padding: 0.2rem 0.6rem;
+                    border-radius: 10px;
+                    border: 1px solid rgba(0, 243, 255, 0.2);
+                }
+            </style>
+        </div>
+
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Abhishek Soni. All rights reserved.</p>
+        <p>📍 Bhopal, MP, India</p>
+    </footer>
+
+    <!-- Modals -->
+    <dialog id="modal-project1" class="modal-wide">
+        <button class="close-modal" onclick="document.getElementById('modal-project1').close()">Close</button>
+        <h3>Autonomous Finance Agent</h3>
+
+        <!-- Project 1 Carousel (Moved to Modal) -->
+        <div class="project-image" id="project1-modal-img"
+            style="height: 300px; margin-bottom: 1rem; border-radius: 8px; overflow: hidden;">
+            <div class="carousel-container">
+                <button class="carousel-btn prev" onclick="scrollCarousel('project1-track', -1)">&#10094;</button>
+                <div class="carousel-track" id="project1-track">
+                    <div class="carousel-item">
+                        <img src="assets/project1.png" class="carousel-slide" alt="Project 1 Main">
+                        <div class="carousel-caption">Main Dashboard View</div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="assets/project1_2.png" class="carousel-slide" alt="Project 1 View 2">
+                        <div class="carousel-caption">Expense Analysis Helper</div>
+                    </div>
+                </div>
+                <button class="carousel-btn next" onclick="scrollCarousel('project1-track', 1)">&#10095;</button>
+            </div>
+        </div>
+
+        <p><strong>Technologies:</strong> Python, Local LLMs (Mistral-7b), PDF Parsing</p>
+        <p>A lightweight, autonomous AI agent that analyzes bank statements, categorizes transactions, and generates
+            insightful financial dashboards. It runs entirely locally on your machine for maximum privacy.</p>
+        <br>
+        <h4>Key Features</h4>
+        <ul>
+            <li><strong>Advanced PDF Parsing:</strong> Intelligent text-stream strategy for complex layouts, robust
+                regex for Indian date formats, and multi-line description merging.</li>
+            <li><strong>Intelligent Analysis:</strong> Auto-categorization of expenses, recurring transaction detection,
+                and spending trend analysis using local LLMs.</li>
+            <li><strong>Premium Dashboard:</strong> Generates rich HTML reports with interactive charts, category
+                breakdowns, and a modern "Pitch Black" UI.</li>
+            <li><strong>Persistent Memory:</strong> Learns from transaction history to improve categorization over time.
+            </li>
+        </ul>
+        <div class="modal-actions">
+            <a href="https://github.com/abhishek39980/autonomous-finance-agent" target="_blank"
+                class="nav-resume-btn">GitHub 🚀</a>
+        </div>
+    </dialog>
+
+    <dialog id="modal-project2" class="modal-wide">
+        <button class="close-modal" onclick="document.getElementById('modal-project2').close()">Close</button>
+        <h3>NMIMS Hostel Management System</h3>
+
+        <!-- Project 2 Carousel (Moved to Modal) -->
+        <div class="project-image" id="project2-modal-img"
+            style="height: 300px; margin-bottom: 1rem; border-radius: 8px; overflow: hidden;">
+            <div class="carousel-container">
+                <button class="carousel-btn prev" onclick="scrollCarousel('project2-track', -1)">&#10094;</button>
+                <div class="carousel-track" id="project2-track">
+                    <div class="carousel-item">
+                        <img src="assets/projects/Screenshot_2026-01-10-15-51-40-97_e915865580ed677e4bb0abfb43f4f066.jpg"
+                            class="carousel-slide"
+                            style="object-fit: contain; width: 100%; height: 100%; background: #000; cursor: zoom-in;"
+                            onclick="openLightbox(this.src)" alt="Mess Menu">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="assets/projects/Screenshot_2026-01-10-15-52-19-66_e915865580ed677e4bb0abfb43f4f066.jpg"
+                            class="carousel-slide"
+                            style="object-fit: contain; width: 100%; height: 100%; background: #000; cursor: zoom-in;"
+                            onclick="openLightbox(this.src)" alt="Main Dashboard">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="assets/projects/Screenshot_2026-01-10-15-52-22-08_e915865580ed677e4bb0abfb43f4f066.jpg"
+                            class="carousel-slide"
+                            style="object-fit: contain; width: 100%; height: 100%; background: #000; cursor: zoom-in;"
+                            onclick="openLightbox(this.src)" alt="Complaint History">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="assets/projects/Screenshot_2026-01-10-15-52-29-47_e915865580ed677e4bb0abfb43f4f066.jpg"
+                            class="carousel-slide"
+                            style="object-fit: contain; width: 100%; height: 100%; background: #000; cursor: zoom-in;"
+                            onclick="openLightbox(this.src)" alt="Lost and Found">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="assets/projects/Screenshot_2026-01-10-15-52-37-37_e915865580ed677e4bb0abfb43f4f066.jpg"
+                            class="carousel-slide"
+                            style="object-fit: contain; width: 100%; height: 100%; background: #000; cursor: zoom-in;"
+                            onclick="openLightbox(this.src)" alt="Profile">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="assets/projects/Screenshot_2026-01-10-15-52-40-08_e915865580ed677e4bb0abfb43f4f066.jpg"
+                            class="carousel-slide"
+                            style="object-fit: contain; width: 100%; height: 100%; background: #000; cursor: zoom-in;"
+                            onclick="openLightbox(this.src)" alt="Raise Complaint">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="assets/projects/Screenshot_2026-01-10-15-53-38-27_e915865580ed677e4bb0abfb43f4f066.jpg"
+                            class="carousel-slide"
+                            style="object-fit: contain; width: 100%; height: 100%; background: #000; cursor: zoom-in;"
+                            onclick="openLightbox(this.src)" alt="Registration">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="assets/projects/Screenshot_2026-01-10-16-08-09-45_e915865580ed677e4bb0abfb43f4f066.jpg"
+                            class="carousel-slide"
+                            style="object-fit: contain; width: 100%; height: 100%; background: #000; cursor: zoom-in;"
+                            onclick="openLightbox(this.src)" alt="Warden Dashboard 1">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="assets/projects/Screenshot_2026-01-10-16-08-20-66_e915865580ed677e4bb0abfb43f4f066.jpg"
+                            class="carousel-slide"
+                            style="object-fit: contain; width: 100%; height: 100%; background: #000; cursor: zoom-in;"
+                            onclick="openLightbox(this.src)" alt="Warden Dashboard 2">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="assets/projects/Screenshot_2026-01-10-16-08-24-12_e915865580ed677e4bb0abfb43f4f066.jpg"
+                            class="carousel-slide"
+                            style="object-fit: contain; width: 100%; height: 100%; background: #000; cursor: zoom-in;"
+                            onclick="openLightbox(this.src)" alt="Warden Dashboard 3">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="assets/projects/Screenshot_2026-01-10-16-08-27-35_e915865580ed677e4bb0abfb43f4f066.jpg"
+                            class="carousel-slide"
+                            style="object-fit: contain; width: 100%; height: 100%; background: #000; cursor: zoom-in;"
+                            onclick="openLightbox(this.src)" alt="Warden Dashboard 4">
+                    </div>
+                </div>
+                <button class="carousel-btn next" onclick="scrollCarousel('project2-track', 1)">&#10095;</button>
+            </div>
+        </div>
+
+        <p><strong>Technologies:</strong> Flutter (Dart), Python (Flask), SQLite</p>
+        <p>The NMIMS Hostel App is a dual-role management system designed to digitize hostel operations. It acts as a
+            comprehensive bridge between students and the hostel administration.</p>
+        <br>
+        <h4>Key Features</h4>
+        <ul>
+            <li><strong>Student Hub:</strong> Secure authentication, community "Lost & Found" board, digital complaint
+                desk with image attachments, and real-time mess menu access.</li>
+            <li><strong>Warden Dashboard:</strong> Admin tools to view/resolve complaints, update daily menus, manage
+                inventory, and moderate content.</li>
+            <li><strong>Robust Backend:</strong> AI-powered backend using Flask & SQLite with secure password hashing
+                (PBKDF2) and optimized image handling.</li>
+        </ul>
+        <div class="modal-actions">
+            <a href="https://github.com/Neelanshdosi/Hostel-App" target="_blank" class="nav-resume-btn">GitHub 🚀</a>
+        </div>
+    </dialog>
+
+    <dialog id="modal-project3" class="modal-wide">
+        <button class="close-modal" onclick="document.getElementById('modal-project3').close()">Close</button>
+        <h3>Self-Balancing Robot</h3>
+
+        <!-- Project 3 Carousel (Moved to Modal) -->
+        <div class="project-image" id="project3-modal-img"
+            style="height: 300px; margin-bottom: 1rem; border-radius: 8px; overflow: hidden;">
+            <div class="carousel-container">
+                <button class="carousel-btn prev" onclick="scrollCarousel('project3-track', -1)">&#10094;</button>
+                <div class="carousel-track" id="project3-track">
+                    <div class="carousel-item">
+                        <img src="assets/projects/IMG20250302193547.jpg" class="carousel-slide"
+                            style="object-fit: contain; width: 100%; height: 100%; background: #000;"
+                            alt="Project 3 Image 1">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="assets/projects/IMG20250302165940.jpg" class="carousel-slide"
+                            style="object-fit: contain; width: 100%; height: 100%; background: #000;"
+                            alt="Project 3 Image 2">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="assets/projects/IMG20250301000822.jpg" class="carousel-slide"
+                            style="object-fit: contain; width: 100%; height: 100%; background: #000;"
+                            alt="Project 3 Image 3">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="assets/projects/IMG20250301000324.jpg" class="carousel-slide"
+                            style="object-fit: contain; width: 100%; height: 100%; background: #000;"
+                            alt="Project 3 Image 4">
+                    </div>
+                </div>
+                <button class="carousel-btn next" onclick="scrollCarousel('project3-track', 1)">&#10095;</button>
+            </div>
+        </div>
+
+        <p><strong>Technologies:</strong> C++, Arduino Uno, PID Control, Sensor Fusion</p>
+        <p>This project is a sophisticated autonomous system designed to maintain vertical stability while navigating
+            its environment. By combining real-time sensor fusion with wireless connectivity, it demonstrates complex
+            control theory and hardware integration.</p>
+        <br>
+        <h4>Core Functionality</h4>
+        <ul>
+            <li><strong>Vertical Stability:</strong> Uses a <strong>PID control loop</strong> with data from an
+                <strong>MPU-9250 IMU</strong> to counteract gravity by adjusting motor speed.
+            </li>
+            <li><strong>Obstacle Avoidance:</strong> Features an <strong>HC-SR04 Ultrasonic sensor</strong> to detect
+                objects and trigger avoidance maneuvers.</li>
+            <li><strong>Connectivity:</strong> Integrated <strong>Wi-Fi + Bluetooth module</strong> allows for real-time
+                data
+                telemetry.</li>
+        </ul>
+        <br>
+        <h4>Hardware Architecture</h4>
+        <ul>
+            <li><strong>Top Tier:</strong> Ultrasonic sensor for clear sight lines and communication modules.</li>
+            <li><strong>Middle Tier:</strong> Arduino Uno, MPU-9250 IMU, and power distribution.</li>
+            <li><strong>Base Tier:</strong> L298N Motor Driver and high-torque BO motors on rubber wheels.</li>
+        </ul>
+        <!-- GitHub Link Removed (Not yet uploaded) -->
+    </dialog>
+
+    <script>
+        // Smooth scroll reveal
+        const reveals = document.querySelectorAll('.reveal');
+        const sections = document.querySelectorAll('section');
+
+        const revealOnScroll = () => {
+            reveals.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('active');
+                }
+            });
+
+            sections.forEach(section => {
+                const sectionTop = section.getBoundingClientRect().top;
+                if (sectionTop < window.innerHeight / 2 && sectionTop > -section.offsetHeight / 2) {
+                    section.classList.add('visible');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', revealOnScroll);
+        revealOnScroll();
+
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Active nav link
+        const navLinks = document.querySelectorAll('nav a');
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Project Carousel Logic
+        function scrollCarousel(trackId, direction) {
+            const track = document.getElementById(trackId);
+            const slideWidth = track.clientWidth;
+            track.scrollBy({ left: direction * slideWidth, behavior: 'smooth' });
+
+            // Prevent event propagation if button click bubbles up
+            if (event) event.stopPropagation();
+        }
+
+        function setupProjectCarousel(uploadId, trackId) {
+            const upload = document.getElementById(uploadId);
+            const track = document.getElementById(trackId);
+
+            upload.addEventListener('change', function (e) {
+                const files = e.target.files;
+                if (files.length > 0) {
+                    Array.from(files).forEach(file => {
+                        if (file.type.startsWith('image/')) {
+                            const reader = new FileReader();
+                            reader.onload = function (event) {
+                                // Create Wrapper
+                                const item = document.createElement('div');
+                                item.className = 'carousel-item';
+
+                                // Create Image
+                                const img = document.createElement('img');
+                                img.src = event.target.result;
+                                img.className = 'carousel-slide';
+
+                                // Create Caption
+                                const caption = document.createElement('div');
+                                caption.className = 'carousel-caption';
+                                caption.innerText = "New Upload"; // Default caption
+
+                                // Assemble
+                                item.appendChild(img);
+                                item.appendChild(caption);
+                                track.appendChild(item);
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    });
+                }
+            });
+        }
+
+
+
+
+    </script>
+
+    <!-- Boot Loader Script (Isolated for Safety) -->
+    <!-- Boot Loader Script (Isolated for Safety & Speed) -->
+    <script>
+        (function () {
+            // Boot Loader Logic
+            const bootText = [
+                "> Initializing Core Systems...",
+                "> Loading Neural Modules...",
+                "> Establishing Secure Connection...",
+                "> Access Granted.",
+                "> Welcome, User."
+            ];
+            const bootLoader = document.getElementById('boot-loader');
+            const bootElement = document.getElementById('boot-text');
+            let isDismissed = false;
+
+            // Prevent scrolling during boot
+            document.body.style.overflow = 'hidden';
+
+            function dismissLoader() {
+                if (isDismissed) return;
+                isDismissed = true;
+
+                if (bootLoader) {
+                    bootLoader.style.opacity = '0';
+                    setTimeout(() => {
+                        bootLoader.style.display = 'none';
+                        document.body.style.overflow = 'auto';
+                    }, 1000);
+                }
+            }
+
+            async function runBootSequence() {
+                if (bootElement) {
+                    for (let line of bootText) {
+                        if (isDismissed) break; // Stop if timeout hit
+                        bootElement.innerText += line + "\n";
+                        await new Promise(r => setTimeout(r, 400));
+                    }
+                }
+                await new Promise(r => setTimeout(r, 500));
+                dismissLoader();
+            }
+
+            // Start boot sequence immediately
+            runBootSequence();
+
+            // Safety timeout: FORCE remove loader after 4 seconds max
+            // This runs immediately, not waiting for 'load', ensuring safety.
+            setTimeout(dismissLoader, 4000);
+        })();
+    </script>
+
+    <!-- Three.js & Animations -->
+    <script src="assets/three.min.js"></script>
+    <script>
+        // 3D Background Animation (Constellation Effect)
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+
+        // Particles
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 100; // Reduced count for performance with lines
+        const posArray = new Float32Array(particlesCount * 3);
+        const velocityArray = new Float32Array(particlesCount * 3);
+
+        for (let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 15;
+            velocityArray[i] = (Math.random() - 0.5) * 0.02;
+        }
+
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+        const material = new THREE.PointsMaterial({
+            size: 0.05,
+            color: 0x00f3ff,
+            transparent: true,
+            opacity: 0.8,
+        });
+
+        const particlesMesh = new THREE.Points(particlesGeometry, material);
+        scene.add(particlesMesh);
+
+        // Lines Geometry
+        const lineMaterial = new THREE.LineBasicMaterial({
+            color: 0x00f3ff,
+            transparent: true,
+            opacity: 0.2
+        });
+        const linesGeometry = new THREE.BufferGeometry();
+        const linesMesh = new THREE.LineSegments(linesGeometry, lineMaterial);
+        scene.add(linesMesh);
+
+        // --- Procedural Mechanical Keyboard ---
+        const keyboardGroup = new THREE.Group();
+        scene.add(keyboardGroup);
+
+        // Keyboard Base
+        const baseGeometry = new THREE.BoxGeometry(15, 0.5, 6);
+        const baseMaterial = new THREE.MeshBasicMaterial({ color: 0x1a1a1a, transparent: true, opacity: 0.8 });
+        const base = new THREE.Mesh(baseGeometry, baseMaterial);
+        base.position.y = -0.5;
+        keyboardGroup.add(base);
+
+        // Keys
+        const keyGeometry = new THREE.BoxGeometry(0.8, 0.5, 0.8);
+        const keyMaterial = new THREE.MeshBasicMaterial({ color: 0x00f3ff, wireframe: true, transparent: true, opacity: 0.5 });
+
+        const rows = 5;
+        const cols = 15;
+        const keyGap = 0.2;
+
+        for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < cols; c++) {
+                const key = new THREE.Mesh(keyGeometry, keyMaterial);
+
+                // Calculate position centered around 0
+                const x = (c - cols / 2) * (0.8 + keyGap) + 0.5;
+                const z = (r - rows / 2) * (0.8 + keyGap) + 0.5;
+
+                key.position.set(x, 0.3, z);
+
+                // Store initial data for animation
+                key.userData = {
+                    initialPos: key.position.clone(),
+                    initialRot: key.rotation.clone(),
+                    // Random explosion direction (away from center + some chaos)
+                    explosionVel: new THREE.Vector3(
+                        (Math.random() - 0.5) * 10 + x * 2,
+                        (Math.random()) * 10,
+                        (Math.random() - 0.5) * 10 + z * 2
+                    ),
+                    rotationVel: new THREE.Vector3(
+                        Math.random() - 0.5,
+                        Math.random() - 0.5,
+                        Math.random() - 0.5
+                    )
+                };
+
+                keyboardGroup.add(key);
+            }
+        }
+
+        // Position the whole keyboard in the background
+        keyboardGroup.position.set(5, 0, -10);
+        keyboardGroup.rotation.x = 0.5;
+        keyboardGroup.rotation.y = -0.5;
+
+        camera.position.z = 3;
+
+        // Mouse Interaction
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetX = 0;
+        let targetY = 0;
+
+        document.addEventListener('mousemove', (event) => {
+            mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+            mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+        });
+
+        const clock = new THREE.Clock();
+
+        function animate() {
+            const positions = particlesMesh.geometry.attributes.position.array;
+
+            // Move particles
+            for (let i = 0; i < particlesCount; i++) {
+                positions[i * 3] += velocityArray[i * 3];
+                positions[i * 3 + 1] += velocityArray[i * 3 + 1];
+                positions[i * 3 + 2] += velocityArray[i * 3 + 2];
+
+                // Boundary check (bounce)
+                if (positions[i * 3] > 7.5 || positions[i * 3] < -7.5) velocityArray[i * 3] *= -1;
+                if (positions[i * 3 + 1] > 5 || positions[i * 3 + 1] < -5) velocityArray[i * 3 + 1] *= -1;
+            }
+            particlesMesh.geometry.attributes.position.needsUpdate = true;
+
+            // Connect particles (Constellation)
+            const linePositions = [];
+
+            // Mouse Proximity Effect
+            targetX = mouseX * 7.5;
+            targetY = mouseY * 5;
+
+            for (let i = 0; i < particlesCount; i++) {
+                const x = positions[i * 3];
+                const y = positions[i * 3 + 1];
+                const z = positions[i * 3 + 2];
+
+                // Connect to mouse
+                const distToMouse = Math.sqrt((x - targetX) ** 2 + (y - targetY) ** 2);
+                if (distToMouse < 2) {
+                    linePositions.push(x, y, z);
+                    linePositions.push(targetX, targetY, 0); // Connect to mouse plane
+                }
+
+                // Connect to neighbors
+                for (let j = i + 1; j < particlesCount; j++) {
+                    const x2 = positions[j * 3];
+                    const y2 = positions[j * 3 + 1];
+                    const z2 = positions[j * 3 + 2];
+
+                    const dist = Math.sqrt((x - x2) ** 2 + (y - y2) ** 2 + (z - z2) ** 2);
+
+                    if (dist < 1.5) {
+                        linePositions.push(x, y, z);
+                        linePositions.push(x2, y2, z2);
+                    }
+                }
+            }
+
+            linesMesh.geometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
+
+            // Smooth Rotation for Background
+            particlesMesh.rotation.y += 0.001;
+            linesMesh.rotation.y += 0.001;
+
+            // --- Keyboard Animation ---
+            const scrollY = window.scrollY;
+            const maxScroll = document.body.scrollHeight - window.innerHeight;
+            const scrollRatio = Math.min(scrollY / maxScroll, 1); // 0 to 1
+
+            // Rotate entire group slowly
+            keyboardGroup.rotation.y = -0.5 + (scrollRatio * 2);
+            keyboardGroup.rotation.z = scrollRatio * 0.5;
+
+            keyboardGroup.children.forEach(child => {
+                if (child.userData.explosionVel) {
+                    // It's a key
+                    const explosionFactor = Math.pow(scrollRatio, 1.5) * 2; // Non-linear explosion
+
+                    child.position.x = child.userData.initialPos.x + (child.userData.explosionVel.x * explosionFactor);
+                    child.position.y = child.userData.initialPos.y + (child.userData.explosionVel.y * explosionFactor);
+                    child.position.z = child.userData.initialPos.z + (child.userData.explosionVel.z * explosionFactor);
+
+                    child.rotation.x = child.userData.initialRot.x + (child.userData.rotationVel.x * explosionFactor * 5);
+                    child.rotation.y = child.userData.initialRot.y + (child.userData.rotationVel.y * explosionFactor * 5);
+                    child.rotation.z = child.userData.initialRot.z + (child.userData.rotationVel.z * explosionFactor * 5);
+                }
+            });
+
+            renderer.render(scene, camera);
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Typewriter Effect
+        const typeWriterText = ["Software Developer", "Full-Stack Engineer", "AI Enthusiast", "Problem Solver"];
+        const typeWriterElement = document.getElementById('typewriter');
+        let typeIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+
+        function type() {
+            const currentString = typeWriterText[typeIndex];
+
+            if (isDeleting) {
+                typeWriterElement.innerText = currentString.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typeWriterElement.innerText = currentString.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            let typeSpeed = isDeleting ? 50 : 100;
+
+            if (!isDeleting && charIndex === currentString.length) {
+                isDeleting = true;
+                typeSpeed = 2000; // Pause at end
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                typeIndex = (typeIndex + 1) % typeWriterText.length;
+                typeSpeed = 500;
+            }
+
+            setTimeout(type, typeSpeed);
+        }
+
+        // Start Typewriter
+        document.addEventListener('DOMContentLoaded', type);
+
+        // 3D Tilt Effect for Cards
+        document.querySelectorAll('.card, .cert-card, .exp-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const rotateX = ((y - centerY) / centerY) * -5; // Limit rotation to 5deg
+                const rotateY = ((x - centerX) / centerX) * 5;
+
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+                card.style.transition = 'transform 0.1s ease';
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+                card.style.transition = 'transform 0.5s ease';
+            });
+        });
+
+        // Custom Cursor Logic
+        const cursor = document.getElementById('cursor');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // Hover effect for cursor
+        document.querySelectorAll('a, button, .project-card, .skill-card, .cert-card, .experience-card').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.classList.add('hovered');
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.classList.remove('hovered');
+            });
+        });
+
+        // Scroll Progress Bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("scrollProgress").style.width = scrolled + "%";
+        });
+
+        // Modal Logic
+        const projectCards = document.querySelectorAll('.project-card');
+        if (projectCards.length >= 3) {
+            projectCards[0].addEventListener('click', () => document.getElementById('modal-project1').showModal());
+            projectCards[1].addEventListener('click', () => document.getElementById('modal-project2').showModal());
+            projectCards[2].addEventListener('click', () => document.getElementById('modal-project3').showModal());
+        }
+
+        // Prevent modal opening when clicking upload areas
+        document.querySelectorAll('.upload-area, input[type="file"]').forEach(el => {
+            el.addEventListener('click', (e) => e.stopPropagation());
+        });
+
+        // Close modal when clicking outside
+        document.querySelectorAll('dialog').forEach(dialog => {
+            dialog.addEventListener('click', (e) => {
+                const rect = dialog.getBoundingClientRect();
+                const isInDialog = (rect.top <= e.clientY && e.clientY <= rect.top + rect.height &&
+                    rect.left <= e.clientX && e.clientX <= rect.left + rect.width);
+                if (!isInDialog) {
+                    dialog.close();
+                }
+            });
+        });
+
+        // Vanilla Tilt Effect
+        document.querySelectorAll('.project-card, .skill-card, .experience-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const rotateX = ((y - centerY) / centerY) * -10;
+                const rotateY = ((x - centerX) / centerX) * 10;
+
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+            });
+        });
+
+
+
+
+
+        // 3D Skill Orb Logic
+        const skills = [
+            "C++", "Python", "Java", "SQL", "Dart",
+            "Flutter", "Flask", "React.js", "Node.js",
+            "Pandas", "NumPy", "OpenCV", "Power BI",
+            "SQLite", "MongoDB", "Firebase", "Werkzeug",
+            "DSA", "DBMS", "OS", "Computer Networks",
+            "Git", "Linux", "Postman", "VS Code",
+            "LangChain", "OpenAI", "Three.js"
+        ];
+
+        const orbContainer = document.getElementById('skill-orb-container');
+        if (orbContainer) {
+            const r = 200; // Radius
+            let mouseXOrb = 0;
+            let mouseYOrb = 0;
+            let rotationX = 0;
+            let rotationY = 0;
+
+            // Create tags
+            skills.forEach((skill, i) => {
+                const tag = document.createElement('div');
+                tag.className = 'skill-tag';
+                tag.innerText = skill;
+                orbContainer.appendChild(tag);
+
+                // Fibonacci Sphere Algorithm for even distribution
+                const phi = Math.acos(-1 + (2 * i) / skills.length);
+                const theta = Math.sqrt(skills.length * Math.PI) * phi;
+
+                tag.dataset.x = r * Math.cos(theta) * Math.sin(phi);
+                tag.dataset.y = r * Math.sin(theta) * Math.sin(phi);
+                tag.dataset.z = r * Math.cos(phi);
+            });
+
+            function animateOrb() {
+                rotationX += 0.005;
+                rotationY += 0.005;
+
+                // Mouse influence
+                const currentRotX = rotationX + (mouseYOrb * 0.002);
+                const currentRotY = rotationY + (mouseXOrb * 0.002);
+
+                document.querySelectorAll('.skill-tag').forEach(tag => {
+                    const x = parseFloat(tag.dataset.x);
+                    const y = parseFloat(tag.dataset.y);
+                    const z = parseFloat(tag.dataset.z);
+
+                    // Rotation Matrix Logic
+                    const cosX = Math.cos(currentRotX);
+                    const sinX = Math.sin(currentRotX);
+                    const cosY = Math.cos(currentRotY);
+                    const sinY = Math.sin(currentRotY);
+
+                    const rotX = x * cosY - z * sinY;
+                    const rotZ1 = z * cosY + x * sinY;
+                    const rotY = y * cosX - rotZ1 * sinX;
+                    const rotZ = rotZ1 * cosX + y * sinX;
+
+                    // Apply 3D position
+                    const scale = (rotZ + r * 2) / (r * 2);
+                    const alpha = (rotZ + r) / (2 * r) + 0.2;
+
+                    tag.style.transform = `translate3d(${rotX}px, ${rotY}px, ${rotZ}px) scale(${scale})`;
+                    tag.style.opacity = alpha;
+                    tag.style.zIndex = Math.floor(rotZ);
+                });
+
+                requestAnimationFrame(animateOrb);
+            }
+
+            // Mouse Move for Orb
+            orbContainer.addEventListener('mousemove', (e) => {
+                const rect = orbContainer.getBoundingClientRect();
+                mouseXOrb = e.clientX - rect.left - rect.width / 2;
+                mouseYOrb = e.clientY - rect.top - rect.height / 2;
+            });
+
+            orbContainer.addEventListener('mouseleave', () => {
+                mouseXOrb = 0;
+                mouseYOrb = 0;
+            });
+
+            animateOrb();
+        }
+
+        // --- Holographic Shine Effect ---
+        document.querySelectorAll('.card, .project-card, .skill-card, .cert-card, .experience-card').forEach(card => {
+            // Add shine element
+            const shine = document.createElement('div');
+            shine.className = 'holo-shine';
+            card.appendChild(shine);
+
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+                // Update CSS variables for this specific card
+                card.style.setProperty('--shine-x', `${x}%`);
+                card.style.setProperty('--shine-y', `${y}%`);
+            });
+        });
+        // --- Magnetic Buttons Effect ---
+        const magneticElements = document.querySelectorAll('a, button, .nav-resume-btn, .fab-contact');
+
+        magneticElements.forEach(el => {
+            el.addEventListener('mousemove', (e) => {
+                const rect = el.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+
+                // Strength of the magnet
+                const strength = 0.5;
+
+                el.style.transform = `translate(${x * strength}px, ${y * strength}px)`;
+                el.style.transition = 'transform 0.1s ease-out';
+            });
+
+            el.addEventListener('mouseleave', () => {
+                el.style.transform = 'translate(0, 0)';
+                el.style.transition = 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)'; // Elastic bounce back
+            });
+        });
+    </script>
+
+
+    <!-- Contact Modal -->
+    <dialog id="contact-modal" class="modal-wide" style="max-width: 500px;">
+        <button class="close-modal" onclick="closeModal('contact-modal')">Close</button>
+        <h3>Get in Touch</h3>
+        <form action="https://formspree.io/f/xbjnqylg" method="POST"
+            style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
+            <input type="text" name="name" placeholder="Your Name" required
+                style="padding: 1rem; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: white; border-radius: 5px;">
+            <input type="email" name="email" placeholder="Your Email" required
+                style="padding: 1rem; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: white; border-radius: 5px;">
+            <textarea name="message" placeholder="Your Message" rows="4" required
+                style="padding: 1rem; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: white; border-radius: 5px; font-family: 'Inter', sans-serif;"></textarea>
+            <button type="submit" class="nav-resume-btn" style="border: none; cursor: pointer; font-size: 1rem;">Send
+                Message 🚀</button>
+        </form>
+    </dialog>
+    <!-- Lightbox Modal -->
+    <dialog id="lightbox-modal"
+        style="padding: 0; border: none; background: transparent; max-width: 100vw; max-height: 100vh;">
+        <div style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9); display: flex; justify-content: center; align-items: center; z-index: 1000;"
+            onclick="closeLightbox()">
+            <button
+                style="position: absolute; top: 20px; right: 30px; background: transparent; border: none; color: white; font-size: 2rem; cursor: pointer; z-index: 1001;"
+                onclick="closeLightbox()">×</button>
+            <img id="lightbox-img" src="" alt="Full Screen View"
+                style="max-width: 90%; max-height: 90%; object-fit: contain; box-shadow: 0 0 20px rgba(0,243,255,0.2);">
+        </div>
+    </dialog>
+
+    <script>
+        function openLightbox(src) {
+            const lightbox = document.getElementById('lightbox-modal');
+            const img = document.getElementById('lightbox-img');
+            img.src = src;
+            lightbox.showModal();
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox-modal');
+            lightbox.close();
+        }
+
+        // Close on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeLightbox();
+            }
+        });
+    </script>
+</body>
+
+</html>
