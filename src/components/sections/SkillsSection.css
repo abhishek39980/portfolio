@@ -1,0 +1,78 @@
+.skills-section {
+    min-height: 80vh;
+    padding: 10vh 10vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    background: var(--color-black);
+}
+
+.skills-section .section-title {
+    font-size: 3rem;
+    color: var(--color-white);
+    text-transform: uppercase;
+    letter-spacing: 0.3rem;
+    margin-bottom: 4rem;
+    font-weight: 700;
+    font-family: var(--font-heading);
+}
+
+.skills-content {
+    display: flex;
+    gap: 4rem;
+    align-items: flex-start;
+}
+
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+    flex: 1;
+}
+
+@media (max-width: 768px) {
+    .skills-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+}
+
+.skill-item {
+    position: relative;
+    padding: 1.5rem 1rem;
+    border: var(--border-width) solid var(--color-black);
+    background: var(--color-white);
+    box-shadow: 4px 4px 0 var(--color-black);
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.skill-item:nth-child(4n+1) {
+    background: var(--color-yellow);
+}
+
+.skill-item:nth-child(4n+2) {
+    background: var(--color-pink);
+}
+
+.skill-item:nth-child(4n+3) {
+    background: var(--color-blue);
+}
+
+.skill-item:nth-child(4n+4) {
+    background: var(--color-green);
+}
+
+.skill-item:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 var(--color-black);
+}
+
+.skill-text {
+    font-size: 1rem;
+    color: var(--color-black);
+    font-weight: 700;
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}

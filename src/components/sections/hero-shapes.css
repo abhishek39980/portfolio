@@ -1,0 +1,66 @@
+/* Decorative rotating shapes */
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 15%;
+    left: 5%;
+    width: 80px;
+    height: 80px;
+    background: var(--color-pink);
+    border: var(--border-width) solid var(--color-black);
+    box-shadow: 4px 4px 0 var(--color-black);
+    z-index: 0;
+    animation: rotate-reverse 20s linear infinite;
+}
+
+.hero-section::after {
+    content: '';
+    position: absolute;
+    bottom: 10%;
+    right: 5%;
+    width: 100px;
+    height: 100px;
+    background: var(--color-blue);
+    border: var(--border-width) solid var(--color-black);
+    border-radius: 50%;
+    box-shadow: 4px 4px 0 var(--color-black);
+    z-index: 0;
+    animation: float 8s ease-in-out infinite;
+}
+
+/* Additional decorative shapes */
+.hero-shape {
+    position: absolute;
+    border: var(--border-width) solid var(--color-black);
+    box-shadow: 4px 4px 0 var(--color-black);
+    z-index: 0;
+}
+
+.hero-shape-1 {
+    top: 30%;
+    right: 10%;
+    width: 60px;
+    height: 60px;
+    background: var(--color-green);
+    animation: rotate-slow 15s linear infinite;
+}
+
+.hero-shape-2 {
+    top: 60%;
+    left: 10%;
+    width: 70px;
+    height: 70px;
+    background: var(--color-yellow);
+    border-radius: 50%;
+    animation: float 10s ease-in-out infinite;
+}
+
+.hero-shape-3 {
+    bottom: 25%;
+    left: 15%;
+    width: 50px;
+    height: 50px;
+    background: var(--color-orange);
+    transform: rotate(45deg);
+    animation: rotate-reverse 18s linear infinite;
+}

@@ -1,0 +1,110 @@
+.project-card {
+    background: var(--color-white);
+    border: var(--border-width) solid var(--color-black);
+    padding: 2.5rem;
+    position: relative;
+    box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--color-black);
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+.project-card:nth-child(1) {
+    box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--color-pink);
+}
+
+.project-card:nth-child(2) {
+    box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--color-blue);
+}
+
+.project-card:nth-child(3) {
+    box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--color-green);
+}
+
+.project-card:hover {
+    transform: translate(2px, 2px);
+}
+
+.project-card:nth-child(1):hover {
+    box-shadow: 4px 4px 0 var(--color-pink);
+}
+
+.project-card:nth-child(2):hover {
+    box-shadow: 4px 4px 0 var(--color-blue);
+}
+
+.project-card:nth-child(3):hover {
+    box-shadow: 4px 4px 0 var(--color-green);
+}
+
+.project-content {
+    position: relative;
+}
+
+.project-card h3 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: var(--color-black);
+    font-weight: 700;
+}
+
+.project-card p {
+    color: var(--color-text);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+}
+
+.tag {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-black);
+    background: var(--color-yellow);
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--color-black);
+}
+
+.links {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-black);
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border: 3px solid var(--color-black);
+    background: var(--color-white);
+    box-shadow: 3px 3px 0 var(--color-black);
+    transition: all 0.2s ease;
+}
+
+.links a:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--color-black);
+    background: var(--color-yellow);
+}
+
+.project-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-black);
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border: 3px solid var(--color-black);
+    background: transparent;
+    opacity: 0.7;
+    cursor: default;
+}

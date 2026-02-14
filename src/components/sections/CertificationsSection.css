@@ -1,0 +1,96 @@
+.certifications-section {
+    padding: 8rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: var(--color-bg);
+}
+
+.cert-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.cert-card {
+    background: var(--color-white);
+    border: var(--border-width) solid var(--color-black);
+    padding: 2rem;
+    box-shadow: 6px 6px 0 var(--color-purple);
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+}
+
+.cert-card:nth-child(2n) {
+    box-shadow: 6px 6px 0 var(--color-orange);
+}
+
+.cert-card:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 4px 4px 0 var(--color-purple);
+}
+
+.cert-card:nth-child(2n):hover {
+    box-shadow: 4px 4px 0 var(--color-orange);
+}
+
+.cert-card h3 {
+    color: var(--color-black);
+    margin-bottom: 0.5rem;
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+.cert-year {
+    color: var(--color-text-light);
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    font-family: var(--font-heading);
+}
+
+.cert-tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin: 1rem 0;
+    flex-grow: 1;
+}
+
+.cert-tag {
+    font-size: 0.75rem;
+    background: var(--color-yellow);
+    color: var(--color-black);
+    padding: 0.4rem 0.8rem;
+    border: 2px solid var(--color-black);
+    font-weight: 600;
+}
+
+.cert-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.cert-btn {
+    display: flex;
+    align-items: center;
+    background: var(--color-white);
+    padding: 0.6rem 1rem;
+    border: 3px solid var(--color-black);
+    color: var(--color-black);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    box-shadow: 3px 3px 0 var(--color-black);
+    transition: all 0.2s ease;
+}
+
+.cert-btn:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--color-black);
+    background: var(--color-pink);
+}

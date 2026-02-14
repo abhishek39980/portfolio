@@ -1,0 +1,166 @@
+.experience-section {
+    min-height: 100vh;
+    padding: 10vh 20vw;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: var(--color-bg);
+    overflow: hidden;
+}
+
+@keyframes rotate-exp {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.experience-section::before {
+    content: '';
+    position: absolute;
+    top: 10%;
+    right: 5%;
+    width: 100px;
+    height: 100px;
+    background: var(--color-pink);
+    border: var(--border-width) solid var(--color-black);
+    opacity: 0.3;
+    animation: rotate-exp 22s linear infinite;
+}
+
+.experience-section::after {
+    content: '';
+    position: absolute;
+    bottom: 15%;
+    left: 3%;
+    width: 80px;
+    height: 80px;
+    background: var(--color-blue);
+    border: var(--border-width) solid var(--color-black);
+    opacity: 0.3;
+    animation: rotate-exp 16s linear infinite reverse;
+}
+
+.experience-timeline {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+    margin-top: 4rem;
+}
+
+.timeline-line {
+    position: absolute;
+    left: -2rem;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--color-black);
+}
+
+.experience-card {
+    position: relative;
+    background: var(--color-white);
+    border: var(--border-width) solid var(--color-black);
+    padding: 2rem;
+    box-shadow: 6px 6px 0 var(--color-blue);
+    transition: all 0.2s ease;
+}
+
+.experience-card:nth-child(2) {
+    box-shadow: 6px 6px 0 var(--color-green);
+}
+
+.experience-card:nth-child(3) {
+    box-shadow: 6px 6px 0 var(--color-orange);
+}
+
+.experience-card:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 4px 4px 0 var(--color-blue);
+}
+
+.experience-card:nth-child(2):hover {
+    box-shadow: 4px 4px 0 var(--color-green);
+}
+
+.experience-card:nth-child(3):hover {
+    box-shadow: 4px 4px 0 var(--color-orange);
+}
+
+.experience-card::before {
+    content: '';
+    position: absolute;
+    left: -2.5rem;
+    top: 2.5rem;
+    width: 14px;
+    height: 14px;
+    background: var(--color-yellow);
+    border: 3px solid var(--color-black);
+    transform: rotate(45deg);
+    z-index: 2;
+}
+
+.exp-date {
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--color-pink);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+}
+
+.exp-role {
+    font-size: 1.5rem;
+    color: var(--color-black);
+    margin-bottom: 0.2rem;
+    font-weight: 700;
+}
+
+.exp-company {
+    font-size: 1.1rem;
+    color: var(--color-text-light);
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.exp-desc {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--color-text);
+    margin-bottom: 1.5rem;
+}
+
+.exp-tech {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.tech-badge {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.8rem;
+    background: var(--color-yellow);
+    color: var(--color-black);
+    font-family: var(--font-body);
+    font-weight: 600;
+    border: 2px solid var(--color-black);
+}
+
+@media (max-width: 768px) {
+    .experience-section {
+        padding: 10vh 5vw;
+    }
+
+    .timeline-line {
+        left: -1rem;
+    }
+
+    .experience-card::before {
+        left: -1.35rem;
+    }
+}
